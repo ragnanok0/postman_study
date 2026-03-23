@@ -24,5 +24,8 @@ jobs:
       run: npm install -g newman # 테스트 도구 설치
 
     - name: Run API Tests
-      # [파일명].json 부분을 실제 본인이 올린 파일 이름으로 수정하세요!
-      run: newman run "github study.postman_collection.json"
+        # postman 폴더 안에 json 파일들을 올렸다고 가정합니다.
+        run: |
+          newman run postman/your_collection.json \
+            --env-var "token=${{ secrets.GOREST_TOKEN }}" \
+            --reporters cli
