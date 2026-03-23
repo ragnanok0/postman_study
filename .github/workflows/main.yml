@@ -25,10 +25,11 @@ jobs:
 
     - name: Run API Tests
       env:
-        # Secret을 시스템 환경 변수로 할당
         MY_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: |
-        # --env-var를 사용하여 JSON 내부의 {{token}} 변수를 치환합니다.
+        # 토큰의 앞 3자리만 출력해서 실제 주입되는 형태를 확인합니다.
+        echo "Token starts with: ${MY_TOKEN:0:3}..."
+        
         newman run postmanstudy.postman_collection.json \
           --env-var "token=${MY_TOKEN}" \
           --reporters cli
