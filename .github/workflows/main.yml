@@ -25,9 +25,10 @@ jobs:
 
     - name: Run API Tests
       env:
+        # Secret을 시스템 환경 변수로 할당
         MY_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: |
-        # --header 옵션을 사용하여 인증 토큰을 직접 주입합니다.
+        # --env-var를 사용하여 JSON 내부의 {{token}} 변수를 치환합니다.
         newman run postmanstudy.postman_collection.json \
-          --header "Authorization: Bearer ${MY_TOKEN}" \
+          --env-var "token=${MY_TOKEN}" \
           --reporters cli
