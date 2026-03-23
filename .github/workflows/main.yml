@@ -27,7 +27,7 @@ jobs:
       env:
         MY_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: |
-        # 변수 주입 과정 없이 헤더에 직접 토큰을 실어 보냅니다.
+        # --header 옵션을 사용하여 인증 토큰을 직접 주입합니다.
         newman run postmanstudy.postman_collection.json \
-          -H "Authorization: Bearer ${MY_TOKEN}" \
+          --header "Authorization: Bearer ${MY_TOKEN}" \
           --reporters cli
