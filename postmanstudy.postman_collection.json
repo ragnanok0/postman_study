@@ -94,7 +94,8 @@
   "variable": [
     {
       "key": "token",
-      "value": ""
+      "value": "bd27fc5a2de08721d17f0414668f56ebd39b29dfc0f88083725141eaf21d0805"
+      "type": "string"
     }
   ]
 }
