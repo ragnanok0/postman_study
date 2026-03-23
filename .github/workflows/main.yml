@@ -26,6 +26,6 @@ jobs:
     - name: Run API Tests
       run: |
         newman run postmanstudy.postman_collection.json \
-          --header "Authorization: Bearer ${{ secrets.GOREST_TOKEN }}" \
-          --header "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ secrets.GOREST_TOKEN }}" \
+          -H "Content-Type: application/json" \
           --reporters cli
