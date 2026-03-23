@@ -24,8 +24,7 @@ jobs:
       run: npm install -g newman # 테스트 도구 설치
 
     - name: Run API Tests
-        # postman 폴더 안에 json 파일들을 올렸다고 가정합니다.
-        run: |
-          newman run postman/postmanstudy.postman_collection.json \
-            --env-var "token=${{ secrets.GOREST_TOKEN }}" \
-            --reporters cli
+      run: |
+        newman run postmanstudy.postman_collection.json \
+          --env-var "token=${{ secrets.GOREST_TOKEN }}" \
+          --reporters cli
