@@ -90,5 +90,11 @@
         }
       ]
     }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
   ]
 }
