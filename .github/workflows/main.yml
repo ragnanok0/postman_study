@@ -25,16 +25,9 @@ jobs:
 
     - name: Run API Tests
       env:
-        # Secret을 시스템 환경 변수로 먼저 선언 (가장 안전)
         MY_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: |
-        # 환경 변수를 중괄호 ${}로 감싸서 Newman에 확실히 전달
+        # 변수 주입 과정 없이 헤더에 직접 토큰을 실어 보냅니다.
         newman run postmanstudy.postman_collection.json \
-          --env-var "token=${MY_TOKEN}" \
+          -H "Authorization: Bearer ${MY_TOKEN}" \
           --reporters cli
-
-    - name: Debug Token Length
-      run: |
-        echo "Token length is: ${#T}"
-      env:
-        T: ${{ secrets.GOREST_TOKEN }}
