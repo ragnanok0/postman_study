@@ -1,19 +1,24 @@
 {
 	"info": {
-		"name": "Practice_API",
+		"name": "API_Flow_Practice",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "게시글 생성 테스트",
+			"name": "1. 게시글 생성 (POST)",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('성공 코드 201 확인', function () {",
+							"pm.test('201 생성 성공 확인', function () {",
 							"    pm.response.to.have.status(201);",
-							"});"
+							"});",
+							"",
+							"// 생성된 ID를 환경 변수에 저장 (GET 요청에서 사용)",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set('new_post_id', jsonData.id);",
+							"console.log('생성된 ID:', jsonData.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -22,26 +27,39 @@
 			"request": {
 				"method": "POST",
 				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
+					{ "key": "Content-Type", "value": "application/json" }
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"foo\",\n    \"body\": \"bar\",\n    \"userId\": 1\n}"
+					"raw": "{\n    \"title\": \"GitHub Action Test\",\n    \"body\": \"Testing POST to GET flow\",\n    \"userId\": 1\n}"
 				},
 				"url": {
-					"raw": "https://jsonplaceholder.typicode.com/posts",
-					"protocol": "https",
-					"host": [
-						"jsonplaceholder",
-						"typicode",
-						"com"
-					],
-					"path": [
-						"posts"
-					]
+					"raw": "https://jsonplaceholder.typicode.com/posts"
+				}
+			}
+		},
+		{
+			"name": "2. 생성된 게시글 조회 (GET)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('200 조회 성공 확인', function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/{{new_post_id}}",
+					"host": [ "jsonplaceholder", "typicode", "com" ],
+					"path": [ "posts", "{{new_post_id}}" ]
 				}
 			}
 		}
