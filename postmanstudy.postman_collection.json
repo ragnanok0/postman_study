@@ -15,10 +15,12 @@
 							"    pm.response.to.have.status(201);",
 							"});",
 							"",
-							"// 생성된 ID를 환경 변수에 저장 (GET 요청에서 사용)",
-							"var jsonData = pm.response.json();",
-							"pm.globals.set('new_post_id', jsonData.id);",
-							"console.log('생성된 ID:', jsonData.id);"
+							"if (pm.response.code === 201) {",
+							"    var jsonData = pm.response.json();",
+							"    // 생성된 ID를 글로벌 변수에 저장",
+							"    pm.globals.set('new_post_id', jsonData.id);",
+							"    console.log('생성된 게시글 ID:', jsonData.id);",
+							"}"
 						],
 						"type": "text/javascript"
 					}
@@ -31,7 +33,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"GitHub Action Test\",\n    \"body\": \"Testing POST to GET flow\",\n    \"userId\": 1\n}"
+					"raw": "{\n    \"title\": \"QA_Test\",\n    \"body\": \"Flow_Test\",\n    \"userId\": 1\n}"
 				},
 				"url": {
 					"raw": "https://jsonplaceholder.typicode.com/posts"
@@ -55,11 +57,8 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [],
 				"url": {
-					"raw": "https://jsonplaceholder.typicode.com/posts/{{new_post_id}}",
-					"host": [ "jsonplaceholder", "typicode", "com" ],
-					"path": [ "posts", "{{new_post_id}}" ]
+					"raw": "https://jsonplaceholder.typicode.com/posts/{{new_post_id}}"
 				}
 			}
 		}
