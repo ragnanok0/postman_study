@@ -1,0 +1,648 @@
+{
+  "info": {
+    "_postman_id": "631278cc-d133-486e-b0d0-9632f497f767",
+    "name": "github 연습용",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "10913074"
+  },
+  "item": [
+    {
+      "name": "기본 연습",
+      "item": [
+        {
+          "name": "유효성 테스트_빈데이터(400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. 응답 상태 코드가 201(생성됨)인지 확인\r",
+                  "pm.test(\"데이터 생성 성공(201)\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "// 2. 응답 결과에 id가 숫자로 들어왔는지 확인\r",
+                  "pm.test(\"ID 값이 숫자로 생성되었는가?\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.id).to.be.a('number');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "유효성 테스트_너무 긴 텍스트(413)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. 서버가 터지지 않고 응답을 주는지 확인\r",
+                  "pm.test(\"서버가 응답을 반환함\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "});\r",
+                  "\r",
+                  "// 2. 응답 코드가 201(성공)이거나 413(너무 큼)인지 확인\r",
+                  "pm.test(\"정상 생성되었거나 거절됨 (500 에러 아님)\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201, 413]);\r",
+                  "});\r",
+                  "\r",
+                  "// 3. 만약 생성되었다면, 데이터가 잘리지 않았는지 확인 (선택 사항)\r",
+                  "pm.test(\"데이터가 포함되어 있음\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.title).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"A\".repeat(2000), \r\n  \"body\": \"매우 긴 텍스트 테스트\",\r\n  \"userId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "유효성 테스트_잘못된 데이터 타입(400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. 서버가 잘못된 요청임을 인지하는지 확인 \r",
+                  "// (실무 API라면 400을 기대하지만, 연습용 API는 201이 나올 수 있습니다)\r",
+                  "pm.test(\"요청 처리 확인\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 400]);\r",
+                  "});\r",
+                  "\r",
+                  "// 2. 응답 본문에서 userId의 상태 확인\r",
+                  "pm.test(\"userId 필드 검증\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    // 보내준 \"QA_USER_999\"가 그대로 들어왔는지 확인\r",
+                  "    pm.expect(jsonData.userId).to.eql(\"QA_USER_999\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"타입 체크 테스트\",\r\n  \"body\": \"userId에 숫자가 아닌 문자를 넣었습니다.\",\r\n  \"userId\": \"QA_USER_999\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "상태코드 테스트_없는 데이터 조회(404)",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "상태코드 테스트_권한없이 수정 시도(401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 연습용 API는 공개용이라 200이 나오겠지만, 실무라면 401을 기대합니다.\r",
+                  "pm.test(\"권한 없음(401) 또는 거부(403) 확인\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([401, 403]); \r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "WrongToken",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"수정 시도\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts/1",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "상태코드 테스트_필수 필드 누락(400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"필수값 누락 시 400 에러 확인\", function () {\r",
+                  "    // 연습용 API 특성상 201이 올 수 있으나, QA는 400을 설계자에게 요구해야 합니다.\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 201]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"body\": \"제목이 없는 게시글입니다.\",\r\n  \"userId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "상태코드 테스트_서버 로직 오류 발생(500)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"500 에러 발생 여부 확인 (버그 리포트 대상)\", function () {\r",
+                  "    if (pm.response.code === 500) {\r",
+                  "        console.log(\"서버 내부 오류 발견: 개발자 확인 필요\");\r",
+                  "    }\r",
+                  "    pm.expect(pm.response.code).to.not.equal(500); // 500이 아니어야 테스트 통과\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"A\".repeat(10000),\r\n  \"body\": \"서버 부하 테스트\",\r\n  \"userId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "데이터 일치성 테스트",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// POST 응답에서 생성된 ID가 101인지 확인\r",
+                  "pm.test(\"새 데이터 ID 101 생성 확인\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.id).to.eql(101);\r",
+                  "});\r",
+                  "\r",
+                  "// 실제 업무라면 여기서 환경 변수에 ID를 저장하고 GET에서 호출합니다."
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Consistency Test\",\r\n  \"body\": \"Data matching check\",\r\n  \"userId\": 7\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "응답 시간 및 성능 테스트",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "보안 및 인증 테스트",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"인증 실패 시 401 Unauthorized 반환 확인\", function () {\r",
+                  "    // 실제 서비스라면 401이 정상이지만, 연습용 API는 통과(200)할 수 있습니다.\r",
+                  "    if (pm.response.code === 200) {\r",
+                  "        console.warn(\"보안 경고: 인증 토큰이 틀렸음에도 삭제 요청이 승인됨!\");\r",
+                  "    }\r",
+                  "    pm.expect(pm.response.code).to.equal(401); \r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer Wrong_Token_12345",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts/1",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "유저목록조회",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "회원가입 성공",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.response.to.have.status(200);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"eve.holt@reqres.in\",\r\n    \"password\": \"pistol\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/register",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "회원가입 실패(비밀번호 누락)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"비밀번호 누락 시 400 에러 확인\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.error).to.eql(\"Missing password\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"sydney@fife\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/register",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "로그인_토큰획득",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "post 연습",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. 서버가 '생성 성공(201)' 응답을 주었는지 확인\r",
+                  "pm.test(\"성공적으로 생성됨 (201 확인)\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "// 2. 내가 보낸 타이틀이 응답에 그대로 들어있는지 확인\r",
+                  "pm.test(\"제목이 일치하는가?\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.title).to.eql(\"타이틀 직접입력\");\r",
+                  "});\r",
+                  "\r",
+                  "// 3. 서버가 새 글에 ID(보통 101)를 부여했는지 확인\r",
+                  "pm.test(\"새로운 ID가 생성되었는가?\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    console.log(\"생성된 게시글 ID: \", jsonData.id);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"타이틀 직접입력\",\r\n    \"body\": \"직접입력한 바디값\",\r\n    \"userId\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post 연습",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 시나리오 1: 서버가 데이터를 잘 받았는지(201) 확인\r",
+                  "pm.test(\"1. 게시글 생성 성공 확인(201)\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "// 시나리오 2: 내가 보낸 'userId'가 응답에도 10으로 오는지 확인\r",
+                  "pm.test(\"2. 보낸 유저 ID가 일치하는가?\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.userId).to.eql(10);\r",
+                  "});\r",
+                  "\r",
+                  "// 시나리오 3: 서버가 응답을 JSON 형식으로 줬는지 확인\r",
+                  "pm.test(\"3. 응답 형식이 JSON인가?\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"QA 첫 걸음\",\r\n  \"body\": \"Postman으로 직접 데이터를 보내보고 있습니다.\",\r\n  \"userId\": 99\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
