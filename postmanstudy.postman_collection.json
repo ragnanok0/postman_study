@@ -34,7 +34,8 @@
                   "const dateStr = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');",
                   "const randomNum = Math.floor(1000 + Math.random() * 9000);",
                   "const uniqueName = `osm_qa_${dateStr}_${randomNum}`;",
-                  "const uniqueEmail = `${uniqueName}@example.com`;",
+                  "// 👇 이메일 도메인을 유니크하게 변경했습니다.",
+                  "const uniqueEmail = `user_${Math.random().toString(36).substring(7)}@qa-testing.io`;",
                   "pm.variables.set(\"dynamicName\", uniqueName);",
                   "pm.variables.set(\"dynamicEmail\", uniqueEmail);",
                   "console.log(\"전송할 이메일:\", uniqueEmail);"
