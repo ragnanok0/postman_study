@@ -24,10 +24,10 @@ jobs:
       run: npm install -g newman # 테스트 도구 설치
 
     - name: Run API Tests
-      env:
-        # Secret을 환경 변수에 먼저 담습니다.
-        GOREST_TOKEN_VAL: ${{ secrets.GOREST_TOKEN }}
-      run: |
-        newman run postmanstudy.postman_collection.json \
-          --env-var "token=$GOREST_TOKEN_VAL" \
-          --reporters cli
+        env:
+          # Secret을 시스템 환경 변수에 할당하여 안전하게 전달합니다.
+          GOREST_TOKEN_VAL: ${{ secrets.GOREST_TOKEN }}
+        run: |
+          newman run postmanstudy.postman_collection.json \
+            --env-var "token=$GOREST_TOKEN_VAL" \
+            --reporters cli
