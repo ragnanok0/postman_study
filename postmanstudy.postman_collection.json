@@ -14,12 +14,8 @@
 							"pm.test('201 생성 성공 확인', function () {",
 							"    pm.response.to.have.status(201);",
 							"});",
-							"",
-							"if (pm.response.code === 201) {",
-							"    var jsonData = pm.response.json();",
-							"    pm.globals.set('new_post_id', jsonData.id);",
-							"    console.log('생성된 ID:', jsonData.id);",
-							"}"
+							"var jsonData = pm.response.json();",
+							"console.log('생성된 ID:', jsonData.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -27,9 +23,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{ "key": "Content-Type", "value": "application/json" }
-				],
+				"header": [{ "key": "Content-Type", "value": "application/json" }],
 				"body": {
 					"mode": "raw",
 					"raw": "{\"title\": \"QA_Test\", \"body\": \"Flow_Test\", \"userId\": 1}"
@@ -38,7 +32,7 @@
 			}
 		},
 		{
-			"name": "2. 생성된 게시글 조회 (GET)",
+			"name": "2. 기존 게시글 조회 (GET)",
 			"event": [
 				{
 					"listen": "test",
@@ -54,7 +48,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"url": "https://jsonplaceholder.typicode.com/posts/{{new_post_id}}"
+				"url": "https://jsonplaceholder.typicode.com/posts/1" 
 			}
 		}
 	]
