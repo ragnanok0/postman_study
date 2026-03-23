@@ -32,3 +32,9 @@ jobs:
         newman run postmanstudy.postman_collection.json \
           --env-var "token=${MY_TOKEN}" \
           --reporters cli
+
+    - name: Debug Token Length
+      run: |
+        echo "Token length is: ${#T}"
+      env:
+        T: ${{ secrets.GOREST_TOKEN }}
