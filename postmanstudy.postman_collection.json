@@ -1,19 +1,21 @@
 {
 	"info": {
-		"name": "ReqRes_Practice",
+		"name": "Postman_Echo_Test",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "1. 유저 생성 (POST)",
+			"name": "1. 데이터 전송 테스트 (POST)",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('201 생성 성공', () => { pm.response.to.have.status(201); });",
+							"pm.test('200 OK 확인', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
 							"var res = pm.response.json();",
-							"console.log('생성된 이름:', res.name);"
+							"console.log('서버가 받은 데이터:', res.data.name);"
 						],
 						"type": "text/javascript"
 					}
@@ -24,19 +26,21 @@
 				"header": [{ "key": "Content-Type", "value": "application/json" }],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"name\": \"QA_Tester\", \"job\": \"QA Engineer\"}"
+					"raw": "{\"name\": \"QA_Engineer_Test\", \"status\": \"success\"}"
 				},
-				"url": "https://reqres.in/api/users"
+				"url": "https://postman-echo.com/post"
 			}
 		},
 		{
-			"name": "2. 유저 목록 조회 (GET)",
+			"name": "2. 데이터 조회 테스트 (GET)",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('200 조회 성공', () => { pm.response.to.have.status(200); });"
+							"pm.test('200 OK 확인', function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -44,7 +48,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"url": "https://reqres.in/api/users?page=2"
+				"url": "https://postman-echo.com/get?test=true"
 			}
 		}
 	]
