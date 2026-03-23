@@ -26,6 +26,6 @@ jobs:
     - name: Run API Tests
         # postman 폴더 안에 json 파일들을 올렸다고 가정합니다.
         run: |
-          newman run postman/your_collection.json \
+          newman run postman/postmanstudy.postman_collection.json \
             --env-var "token=${{ secrets.GOREST_TOKEN }}" \
             --reporters cli
