@@ -1,101 +1,36 @@
 {
   "info": {
-    "_postman_id": "71fe087d-0ee9-4031-b880-1ad6eb2da964",
-    "name": "postmanstudy",
+    "name": "Practice_API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "gorest 연습",
-      "item": [
-        {
-          "name": "계정정보 등록",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.globals.set(\"generated_user_id\", jsonData.id);",
-                  "    console.log(\"확정된 사용자 ID 저장 완료:\", jsonData.id);",
-                  "} else {",
-                  "    console.log(\"생성 실패! 응답 코드:\", pm.response.code);",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const now = new Date();",
-                  "const dateStr = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');",
-                  "const randomNum = Math.floor(1000 + Math.random() * 9000);",
-                  "const uniqueName = `osm_qa_${dateStr}_${randomNum}`;",
-                  "// 👇 이메일 도메인을 유니크하게 변경했습니다.",
-                  "const uniqueEmail = `user_${Math.random().toString(36).substring(7)}@qa-testing.io`;",
-                  "pm.variables.set(\"dynamicName\", uniqueName);",
-                  "pm.variables.set(\"dynamicEmail\", uniqueEmail);",
-                  "console.log(\"전송할 이메일:\", uniqueEmail);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"name\": \"{{dynamicName}}\",\n    \"gender\": \"male\",\n    \"email\": \"{{dynamicEmail}}\",\n    \"status\": \"active\"\n}"
-            },
-            "url": {
-              "raw": "https://gorest.co.in/public/v2/users",
-              "protocol": "https",
-              "host": ["gorest", "co", "in"],
-              "path": ["public", "v2", "users"]
-            }
-          }
+      "name": "게시글 생성 테스트",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"foo\", \"body\": \"bar\", \"userId\": 1}"
         },
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts"
+        }
+      },
+      "event": [
         {
-          "name": "등록한 계정정보 조회",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "https://gorest.co.in/public/v2/users/{{generated_user_id}}",
-              "protocol": "https",
-              "host": ["gorest", "co", "in"],
-              "path": ["public", "v2", "users", "{{generated_user_id}}"]
-            }
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('성공 코드 201 확인', function () {",
+              "    pm.response.to.have.status(201);",
+              "});"
+            ]
           }
         }
       ]
-    }
-  ],
-  "variable": [
-    {
-      "key": "token",
-      "value": ""
     }
   ]
 }
