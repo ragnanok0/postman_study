@@ -25,8 +25,10 @@ jobs:
 
     - name: Run API Tests
       env:
-        GOREST_TOKEN_VAL: ${{ secrets.GOREST_TOKEN }}
+        # Secret을 시스템 환경 변수로 먼저 선언 (가장 안전)
+        MY_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: |
+        # 환경 변수를 중괄호 ${}로 감싸서 Newman에 확실히 전달
         newman run postmanstudy.postman_collection.json \
-          --env-var "token=${GOREST_TOKEN_VAL}" \
+          --env-var "token=${MY_TOKEN}" \
           --reporters cli
