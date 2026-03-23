@@ -23,6 +23,4 @@ jobs:
 
     - name: Run API Tests
       run: |
-        newman run postmanstudy.postman_collection.json \
-          --reporters cli \
-          --global-var "new_post_id=1"
+        newman run postmanstudy.postman_collection.json --reporters cli
