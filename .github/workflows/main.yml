@@ -24,7 +24,9 @@ jobs:
       run: npm install -g newman # 테스트 도구 설치
 
     - name: Run API Tests
+      env:
+        MY_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: |
         newman run postmanstudy.postman_collection.json \
-          --env-var "token=${{ secrets.GOREST_TOKEN }}" \
+          --env-var "token=$MY_TOKEN" \
           --reporters cli
