@@ -1,0 +1,122 @@
+{
+  "info": {
+    "_postman_id": "71fe087d-0ee9-4031-b880-1ad6eb2da964",
+    "name": "postmanstudy",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "10913074"
+  },
+  "item": [
+    {
+      "name": "gorest 연습",
+      "item": [
+        {
+          "name": "계정정보 등록",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. 서버 응답 코드가 201(정상 생성)인지 확인\r",
+                  "if (pm.response.code === 201) {\r",
+                  "    // 2. 서버가 보내준 JSON 데이터를 파싱\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    // 3. 응답 데이터 중 'id'만 골라 전역 변수(Globals)에 저장\r",
+                  "    // 이렇게 저장하면 다른 모든 Request에서 {{generated_user_id}}로 사용 가능합니다.\r",
+                  "    pm.globals.set(\"generated_user_id\", jsonData.id);\r",
+                  "    \r",
+                  "    console.log(\"확정된 사용자 ID 저장 완료:\", jsonData.id);\r",
+                  "} else {\r",
+                  "    console.log(\"생성 실패! 응답 코드:\", pm.response.code);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// 1. 현재 날짜와 시간 가져오기 (YYYYMMDD 형식)\r",
+                  "const now = new Date();\r",
+                  "const dateStr = now.getFullYear() + \r",
+                  "                String(now.getMonth() + 1).padStart(2, '0') + \r",
+                  "                String(now.getDate()).padStart(2, '0');\r",
+                  "\r",
+                  "// 2. 겹치지 않도록 4자리 랜덤 숫자 생성\r",
+                  "const randomNum = Math.floor(1000 + Math.random() * 9000);\r",
+                  "\r",
+                  "// 3. 특정 명칭과 조합 (백틱 ` 사용 필수!)\r",
+                  "const uniqueName = `osm_qa_${dateStr}_${randomNum}`;\r",
+                  "const uniqueEmail = `${uniqueName}@example.com`;\r",
+                  "\r",
+                  "// 4. 생성된 값을 변수에 담아 Body에서 쓸 수 있게 함\r",
+                  "pm.variables.set(\"dynamicName\", uniqueName);\r",
+                  "pm.variables.set(\"dynamicEmail\", uniqueEmail);\r",
+                  "\r",
+                  "console.log(\"준비된 이메일:\", uniqueEmail);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"{{dynamicName}}\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{dynamicEmail}}\",\r\n    \"status\": \"active\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users",
+              "protocol": "https",
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "path": [
+                "public",
+                "v2",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "등록한 계정정보 조회",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://gorest.co.in/public/v2/users/{{generated_user_id}}",
+              "protocol": "https",
+              "host": [
+                "gorest",
+                "co",
+                "in"
+              ],
+              "path": [
+                "public",
+                "v2",
+                "users",
+                "{{generated_user_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
