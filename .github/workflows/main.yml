@@ -1,19 +1,17 @@
-name: Postman API Test Automation
+name: Postman API Test
 
-# 언제 실행할까요? (코드를 Push하거나 Pull Request 할 때)
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   test:
-    runs-on: ubuntu-latest # 가상 서버 환경
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4 # 내 코드를 가상 서버로 가져오기
+      uses: actions/checkout@v4
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
@@ -21,10 +19,14 @@ jobs:
         node-version: '20'
 
     - name: Install Newman
-      run: npm install -g newman # 테스트 도구 설치
+      run: npm install -g newman
 
     - name: Run API Tests
+      env:
+        # GitHub Secret에 등록된 토큰 알맹이를 환경변수로 가져옵니다.
+        GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: |
-        # 옵션 없이 파일만 실행합니다. 토큰은 이미 파일 안에 있습니다.
+        # --env-var 옵션을 통해 JSON 내부의 {{token}} 자리에 값을 주입합니다.
         newman run postmanstudy.postman_collection.json \
+          --env-var "token=${GOREST_TOKEN}" \
           --reporters cli
