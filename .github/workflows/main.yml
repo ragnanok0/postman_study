@@ -22,14 +22,5 @@ jobs:
       run: npm install -g newman
 
     - name: Run API Tests
-      env:
-        GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: |
-        # --env-var로 토큰을 주입하되, 상세 로그 출력을 위해 --reporters cli 뒤에 
-        # --reporter-cli-show-symbols 옵션 등을 확인하거나 curl로 직접 찔러봅니다.
-        
-        echo "Starting API Test with Debugging..."
-        newman run postmanstudy.postman_collection.json \
-          --env-var "token=${GOREST_TOKEN}" \
-          --reporters cli \
-          --verbose  # 이 옵션이 서버와의 상세 통신 내역을 보여줍니다.
+        newman run postmanstudy.postman_collection.json --reporters cli
