@@ -26,5 +26,6 @@ jobs:
     - name: Run API Tests
       run: |
         newman run postmanstudy.postman_collection.json \
-          --env-var "token=${{ secrets.GOREST_TOKEN }}" \
+          --header "Authorization: Bearer ${{ secrets.GOREST_TOKEN }}" \
+          --header "Content-Type: application/json" \
           --reporters cli
