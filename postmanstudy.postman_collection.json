@@ -17,9 +17,8 @@
 							"",
 							"if (pm.response.code === 201) {",
 							"    var jsonData = pm.response.json();",
-							"    // 생성된 ID를 글로벌 변수에 저장",
 							"    pm.globals.set('new_post_id', jsonData.id);",
-							"    console.log('생성된 게시글 ID:', jsonData.id);",
+							"    console.log('생성된 ID:', jsonData.id);",
 							"}"
 						],
 						"type": "text/javascript"
@@ -33,11 +32,9 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"QA_Test\",\n    \"body\": \"Flow_Test\",\n    \"userId\": 1\n}"
+					"raw": "{\"title\": \"QA_Test\", \"body\": \"Flow_Test\", \"userId\": 1}"
 				},
-				"url": {
-					"raw": "https://jsonplaceholder.typicode.com/posts"
-				}
+				"url": "https://jsonplaceholder.typicode.com/posts"
 			}
 		},
 		{
@@ -57,9 +54,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"url": {
-					"raw": "https://jsonplaceholder.typicode.com/posts/{{new_post_id}}"
-				}
+				"url": "https://jsonplaceholder.typicode.com/posts/{{new_post_id}}"
 			}
 		}
 	]
